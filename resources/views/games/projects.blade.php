@@ -14,11 +14,7 @@
         <div class="mb-8">
             <a href="/games" class="text-blue-200 hover:underline">&laquo; Torna alla lista partite</a>
         </div>
-        <h1 class="text-2xl font-bold mb-2">Progetti di {{ $game->name }}</h1>
-        <div class="mb-6">
-            <span class="font-semibold">Patrimonio:</span>
-            <span id="game-patrimonio" class="text-blue-200 font-bold">€ {{ number_format($game->patrimonio, 0, ',', '.') }}</span>
-        </div>
+        <x-statistics :game="$game"/>
         <h2 class="text-xl font-semibold mt-8 mb-3">Progetti attuali</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @forelse($projects->where('status', 'in_progress') as $project)
@@ -54,49 +50,49 @@
 
         <h2 class="text-xl font-semibold mt-10 mb-3">Nuovi progetti assegnabili</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            @forelse($projects->where('status', 'ready') as $project)            
-                @include('games.cardproject', [
-                    'type' => 'ready',
-                    'id' => $project->id,
-                    'name' => $project->name,
-                    'Salename' => $project->sale->name ?? null,
-                    'Complex' => $project->complex,
-                    'Value' => $project->value,
-                    'gameState' => $game->state,
-                    'gameid' => $game->id,
-                ])
+            @forelse($projects->where('status', 'ready') as $project)    
+                <x-cards.project 
+                    type="ready" 
+                    :id="$project->id" 
+                    :name="$project->name" 
+                    :sale_name="$project->sale->name ?? null" 
+                    :complex="$project->complex" 
+                    :value="$project->value"  
+                    :game_state="$game->state" 
+                    :game_id="$game->id"
+                />
             @empty
                 <div class="col-span-2 text-gray-400">Nessun nuovo progetto disponibile.</div>
             @endforelse
         </div>
         <h2 class="text-xl font-semibold mt-10 mb-3">Progetti completati</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            @forelse($projects->where('status', 'complete') as $project)            
-                @include('games.cardproject', [
-                    'type' => 'complete',
-                    'id' => $project->id,
-                    'name' => $project->name,
-                    'Salename' => $project->sale->name ?? null,
-                    'Complex' => $project->initial_complex,
-                    'Value' => $project->value,
-                    'gameState' => $game->state,
-                    'gameid' => $game->id,
-                ])
+            @forelse($projects->where('status', 'complete') as $project)       
+                <x-cards.project 
+                    type="complete" 
+                    :id="$project->id" 
+                    :name="$project->name" 
+                    :sale_name="$project->sale->name ?? null" 
+                    :complex="$project->initial_complex" 
+                    :value="$project->value"  
+                    :game_state="$game->state" 
+                    :game_id="$game->id"
+                />    
             @empty
                 <div class="col-span-2 text-gray-400">Nessun progetto completato.</div>
             @endforelse
 
-            @foreach($projects->where('status', 'done') as $project)            
-                @include('games.cardproject', [
-                    'type' => 'done',
-                    'id' => $project->id,
-                    'name' => $project->name,
-                    'Salename' => $project->sale->name ?? null,
-                    'Complex' => $project->initial_complex,
-                    'Value' => $project->value,
-                    'gameState' => $game->state,
-                    'gameid' => $game->id,
-                ])
+            @foreach($projects->where('status', 'done') as $project)     
+                <x-cards.project 
+                    type="done" 
+                    :id="$project->id" 
+                    :name="$project->name" 
+                    :sale_name="$project->sale->name ?? null" 
+                    :complex="$project->initial_complex" 
+                    :value="$project->value"  
+                    :game_state="$game->state" 
+                    :game_id="$game->id"
+                />
             @endforeach
         </div>
     </div>

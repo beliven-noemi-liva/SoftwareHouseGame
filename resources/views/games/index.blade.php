@@ -59,7 +59,7 @@
                                     });
                             @endphp     
                             @foreach($games as $game)
-                                    @include('games.card', ['game' => $game])
+                                <x-cards.game :game="$game" />
                             @endforeach
                     @else
                         <p>Nessuna partita ancora!</p>

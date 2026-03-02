@@ -1,3 +1,4 @@
+@props(['type', 'name', 'exp', 'stipendio', 'id', 'game', 'project_id'])
 @php
     $border = $type === 'sale' ? 'border-blue-200' : 'border-blue-400';
     $bgcolor = $type === 'sale' ? 'bg-blue-200' : 'bg-blue-400';
