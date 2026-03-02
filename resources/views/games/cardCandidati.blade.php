@@ -14,7 +14,7 @@
         @endif
     </div>
     @if(!$game->devs()->where('id', $id)->exists() && !$game->sales()->where('id', $id)->exists())
-        <form method="POST" action="/candidati/{{ $id }}/assumi">
+        <form method="POST" action="/{{$game->id}}/candidates/{{ $id }}/hire">
             @csrf
             <input type="hidden" name="type" value="{{ $type }}">
             <input type="hidden" name="id" value="{{ $id }}">

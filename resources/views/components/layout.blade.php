@@ -16,7 +16,7 @@
             </div>
             @auth
             <div class="space-x-6 font-bold">
-                <x-link href="/games/{{ $game?->id }}/candidati" active="{{$active === 'candidati'}}"  >Candidati</x-link>
+                <x-link href="/games/{{ $game?->id }}/candidates" active="{{$active === 'candidati'}}"  >Candidati</x-link>
                 <x-link href="{{ $game?->id ? '/games/' . $game->id : '#' }}" active="{{$active === 'azienda'}}" >Azienda</x-link>
                 <x-link href="/games/{{ $game?->id }}/projects" active="{{$active === 'progetti'}}" >Progetti</x-link>
             </div>

@@ -1,13 +1,12 @@
-
-//due intervalli uno ogni 10 secondi per aggiornare i patrimoni globali e ogni 3 secondi per aggiornare i progressi dei progetti (se siamo nella pagina progetti) 
+//two intervals, one every 10 seconds to update global assets and every 3 seconds to update project progress (if we are on the projects page)
 let projectProgressInterval = null;  
 let updateInterval = null;
 
 
-// Aggiorna il progresso dei progetti (se siamo nella pagina progetti)
+// Update project progress (if we are on the projects page)
 function updateProjectProgress() {
     const projectCards = document.querySelectorAll('.project-card');
-    //controllo se ci sono card di progetti nella pagina, se non ci sono esco dalla funzione
+    //check if there are project cards on the page, if there aren't I exit the function
     if (projectCards.length === 0) return;
     projectCards.forEach(card => {
         const projectId = card.dataset.projectId;
@@ -48,8 +47,8 @@ function updateProjectProgress() {
         .catch(error => console.error('Errore aggiornamento progresso:', error));
     });
 }
-//aggiorna i progetti globalmente (utile per quando non si è all'interno di una partita, controlla che aggiorni anche le altre partite )
-//essendo che tickall prende solo quelli in done e li processa, ma manca il passaggio per farli arrivare in done automatico 
+//Updates projects globally (useful for when you're not in a game; make sure it also updates other games)
+//Since tickall only takes the ones in done and processes them, it's missing the step to automatically send them to done.
 function updateProjectProgressGlobal() {
     const gameCard = document.querySelector('[data-game-id]');
     if (gameCard) {
@@ -67,7 +66,7 @@ function updateProjectProgressGlobal() {
     }
 }
 
-// Aggiorna i patrimoni globalmente (utile per la pagina games/index) e il pulsante terminata/pausa/riprendi
+// Update assets globally (useful for the games/index page) and the finish/pause/resume button
 function updateAllGamePatrimonios() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
     
@@ -85,16 +84,15 @@ function updateAllGamePatrimonios() {
     const gameData = data.games[gameId];
     const gameCard = document.querySelector(`[data-game-id="${gameId}"]`);
     if (gameCard) {
-        // Aggiorna patrimonio
+        // Update patrimonio
         const patrSpan = gameCard.querySelector('.game-patrimonio');
         if (patrSpan && gameData.patrimonio !== undefined) {
             patrSpan.textContent = '€ ' + new Intl.NumberFormat('it-IT').format(Math.round(gameData.patrimonio));
-            // puoi anche aggiornare la classe per colore verde/rosso, se vuoi
             patrSpan.classList.toggle('text-green-500', gameData.patrimonio > 0);
             patrSpan.classList.toggle('text-red-500', gameData.patrimonio <= 0);
         }
 
-        // Aggiorna blocco pulsanti/stato
+        // Update button/status 
         const actionDiv = gameCard.querySelector('div[style*="text-align: right"]');
         if (actionDiv) {
             if (gameData.state === 'paused') {
@@ -152,7 +150,7 @@ function startAutoUpdates() {
         updateProjectProgressGlobal()
         //autoProcaccia();
         
-        //aggiorno updateAllGamePatrimonios ogni 10 secondi e updateProjectProgressGlobal() e updateProjectProgress ogni 3 secondi 
+        //update updateAllGamePatrimonios every 10 seconds and updateProjectProgressGlobal() and updateProjectProgress every 3 seconds
         updateInterval = setInterval(updateAllGamePatrimonios, 10000);
         projectProgressInterval = setInterval(() => {
             updateProjectProgress();
@@ -173,14 +171,14 @@ function stopAutoUpdates() {
     }
 }
 
-// Inizializza quando il DOM è pronto
+// Initialize when the DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('game-container');
     if (container && container.dataset.gameState === 'in_progress') {
         startAutoUpdates();
         return;
     }
-    // Controlla se ci sono giochi in progress (pagina index)
+    // Check if there are any games in progress (index page)
     const gamesInProgress = document.querySelectorAll('[data-game-id][data-game-state="in_progress"]');
     if (gamesInProgress.length > 0) {
         startAutoUpdates();

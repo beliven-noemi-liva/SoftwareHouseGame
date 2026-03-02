@@ -7,7 +7,7 @@
         <span id="game-patrimonio" class="text-blue-200 font-bold">€ {{ number_format($game->patrimonio, 0, ',', '.') }}</span>
     </div>
     <h1 class="text-2xl font-bold mb-6">Candidati disponibili</h1>
-    <form method="POST" action="/candidati/genera" class="mb-8">
+    <form method="POST" action="/{{$game->id}}/candidates/create" class="mb-8">
         @csrf
          <button type="submit" class="bg-blue-200 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded text-sm">Genera nuovi candidati</button>
         <span class="text-xs text-gray-300 ml-2">Max 50 totali</span>
