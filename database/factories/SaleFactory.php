@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Game;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sale>
  */
 class SaleFactory extends Factory
-{    /**
+{
+    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -18,10 +18,10 @@ class SaleFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'project_id' => null,
-            'exp' => fake()->numberBetween(1, 10),
+            // 'project_id' => null,
+            'exp'       => fake()->numberBetween(1, 10),
             'stipendio' => fake()->numberBetween(1000, 3000),
-            'game_id' => null,
+            'game_id'   => null,
         ];
     }
 }

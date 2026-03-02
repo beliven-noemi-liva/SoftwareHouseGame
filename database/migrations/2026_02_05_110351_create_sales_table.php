@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('project_id')->nullable()->constrained()->onDelete('set null');
+            // $table->foreignId('project_id')->nullable()->constrained()->onDelete('set null');
             $table->integer('exp')->default(3);
             $table->integer('stipendio')->default(1500);
             $table->foreignId('game_id')->nullable()->constrained()->onDelete('cascade');
