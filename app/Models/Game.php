@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Dev;
-use App\Models\Sale;
-use App\Models\Project;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'user_id',
@@ -42,7 +39,7 @@ class Game extends Model
 
     public function processEconomyTick()
     {
-        // Processa progetti completati (status = done) e aggiungi valore al patrimonio, cambia status a complete      
+        // Processa progetti completati (status = done) e aggiungi valore al patrimonio, cambia status a complete
         $doneProjects = $this->projects()->where('status', 'done')->get();
         $ProjectMoney = 0;
         foreach ($doneProjects as $project) {
@@ -64,7 +61,7 @@ class Game extends Model
             $this->state = 'finish';
         }
 
-        //verifico che i sales procaccino progetti quando il gioco è ready
+        // verifico che i sales procaccino progetti quando il gioco è ready
         if (in_array($this->state, ['in_progress'])) {
             foreach ($this->sales as $sale) {
                 $sale->procacciaProgetto($this);
@@ -75,9 +72,9 @@ class Game extends Model
 
         return [
             'total_salaries' => $totalSalaries,
-            'collected' => $ProjectMoney,
-            'patrimonio' => $this->patrimonio,
-            'state' => $this->state,
+            'collected'      => $ProjectMoney,
+            'patrimonio'     => $this->patrimonio,
+            'state'          => $this->state,
         ];
     }
 }

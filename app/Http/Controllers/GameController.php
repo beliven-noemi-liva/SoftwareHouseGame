@@ -60,7 +60,7 @@ class GameController extends Controller
             return response()->json(['state' => $game->state, 'message' => 'Partita in pausa']);
         }
 
-        return redirect('/games');
+        return redirect("/games/{$game->id}/projects");
     }
 
     // Resume the game
