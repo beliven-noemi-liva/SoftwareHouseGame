@@ -14,7 +14,11 @@
         <div class="mb-8">
             <a href="/games" class="text-blue-200 hover:underline">&laquo; Torna alla lista partite</a>
         </div>
-        <x-statistics :game="$game"/>
+        <!-- <x-statistics :game="$game"/> -->
+        <div id="statistics-wrapper"
+            data-game-id="{{ $game->id }}"
+            data-game='@json($game)'>
+        </div>
         <h2 class="text-xl font-semibold mt-8 mb-3">Progetti attuali</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @forelse($projects->where('status', 'in_progress') as $project)
@@ -32,14 +36,24 @@
                                 <span class="text-blue-900">Complessità:</span> <span class="initial-complexity">{{ $project->initial_complex}}</span>
                             </div>
                             
-                            <div class="mb-2">
+                            {{-- <div class="mb-2">
                                 <div class="flex justify-between mb-1">
                                     <span class="text-blue-900">Progresso: </span>
                                 </div>
                                 <div class="w-full bg-blue-300 border border-blue-900 rounded-full h-4">
                                     <div class="bg-blue-800 h-4 rounded-full transition-all duration-300 progress-bar" style="width: {{ number_format(($project->initial_complex - $project->complex) / $project->initial_complex * 100)}}%;"></div>
                                 </div>
+                            </div>--}}
+                            <div
+                                class="progress-vue"
+                                id="project-progress-{{ $project->id }}"
+                                data-project-id="{{ $project->id }}"
+                                data-initial-complexity="{{ $project->initial_complex }}"
+                                data-initial-complexity-db="{{ $project->complex }}"
+                                data-game-id="{{ $game->id }}"
+                                data-game-state="{{ $game->state }}">
                             </div>
+
                         </div>
                     </div>
                 </div>

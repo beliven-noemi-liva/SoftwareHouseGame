@@ -1,3 +1,6 @@
+{{-- Deprecated: This file/component is not used anymore.
+Kept for historical/reference purposes. May be removed in the future. --}}
+
 @props(['game'])
 <div class="border-3 border-blue-100 bg-blue-950 rounded px-5 py-4 mx-50" data-game-id="{{ $game->id }}" data-game-state="{{ $game->state }}" style="display: flex; align-items: center; justify-content: space-between;">
     <div class="font-semibold">

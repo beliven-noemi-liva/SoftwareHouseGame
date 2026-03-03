@@ -59,7 +59,15 @@
                                     });
                             @endphp     
                             @foreach($games as $game)
-                                <x-cards.game :game="$game" />
+                                {{-- <x-cards.game :game="$game" /> --}} 
+                                <div
+                                    class="game-card-vue"
+                                    id="game-card-{{ $game->id }}"
+                                    data-game-id="{{ $game->id }}"
+                                    data-game-name="{{ $game->name }}"
+                                    data-game-patrimonio="{{ $game->patrimonio }}"
+                                    data-game-state="{{ $game->state }}"
+                                ></div>
                             @endforeach
                     @else
                         <p>Nessuna partita ancora!</p>

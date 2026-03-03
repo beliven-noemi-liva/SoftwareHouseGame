@@ -1,5 +1,8 @@
+// Deprecated: This file/component is not used anymore.
+// Kept for historical/reference purposes. May be removed in the future.
+
 //two intervals, one every 10 seconds to update global assets and every 3 seconds to update project progress (if we are on the projects page)
-let projectProgressInterval = null;
+/*let projectProgressInterval = null;
 let updateInterval = null;
 
 // Update project progress (if we are on the projects page)
@@ -132,24 +135,7 @@ function updateAllGamePatrimonios() {
             }
         })
 }
-//essendo che per procacciare c'è il wait lo rendo automatico e assestante (si bugga tutto) 
-/*function autoProcaccia() {
-    const gameCard = document.querySelector('[data-game-id]');
-    if (gameCard) {
-        const gameId = gameCard.dataset.gameId;
-        fetch(`/games/${gameId}/auto-procaccia`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .catch(error => console.error('Errore auto procaccia:', error));
-    }
-}*/
-
+        
 function startAutoUpdates() {
     if (updateInterval === null && projectProgressInterval === null) {
         //updateProjectProgress();
@@ -158,7 +144,7 @@ function startAutoUpdates() {
         //autoProcaccia();
 
         //update updateAllGamePatrimonios every 10 seconds and updateProjectProgressGlobal() and updateProjectProgress every 3 seconds
-        updateInterval = setInterval(updateAllGamePatrimonios, 10000);
+        //updateInterval = setInterval(updateAllGamePatrimonios, 10000);
         projectProgressInterval = setInterval(() => {
             updateProjectProgress();
             updateProjectProgressGlobal();
@@ -192,3 +178,4 @@ document.addEventListener('DOMContentLoaded', () => {
         startAutoUpdates();
     }
 });
+*/

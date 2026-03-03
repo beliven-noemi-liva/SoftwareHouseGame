@@ -39,7 +39,13 @@ class Game extends Model
 
     public function processEconomyTick()
     {
-        // Processa progetti completati (status = done) e aggiungi valore al patrimonio, cambia status a complete
+        // update the project
+        $inProgressProjects = $this->projects()->where('status', 'in_progress')->get();
+        foreach ($inProgressProjects as $proj) {
+            $proj->updateProgress();
+            $proj->save();
+        }
+        // Add the value of done project (status = done) at the patrimonio and change the status in complete
         $doneProjects = $this->projects()->where('status', 'done')->get();
         $ProjectMoney = 0;
         foreach ($doneProjects as $project) {
@@ -47,21 +53,18 @@ class Game extends Model
             $project->status = 'complete';
             $project->save();
         }
+        $this->patrimonio = $this->patrimonio + $ProjectMoney;
 
-        // Calcola stipendi totali di dev e sale
+        // Update patrimonio with salaries of devs and sales
         $totalSalaries = $this->sales()->sum('stipendio') + $this->devs()->sum('stipendio');
-
-        // Sottrai stipendi
         $this->patrimonio = $this->patrimonio - $totalSalaries;
 
-        // Aggiungi soldi dei progetti
-        $this->patrimonio = $this->patrimonio + $ProjectMoney;
-        // Controlla se il gioco è finito
+        // check if the game is over
         if ($this->patrimonio <= 0) {
             $this->state = 'finish';
         }
 
-        // verifico che i sales procaccino progetti quando il gioco è ready
+        // check if sales get new projects
         if (in_array($this->state, ['in_progress'])) {
             foreach ($this->sales as $sale) {
                 $sale->procacciaProgetto($this);

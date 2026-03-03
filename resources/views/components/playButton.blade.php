@@ -1,3 +1,5 @@
+{{-- Deprecated: This file/component is not used anymore.
+Kept for historical/reference purposes. May be removed in the future. --}}
 @props(['game'])
 <div class="play-button">
     @if($game->state === 'paused')

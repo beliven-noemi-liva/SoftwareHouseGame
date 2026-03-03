@@ -3,7 +3,11 @@
         <div class="mb-8">
             <a href="/games" class="text-blue-200 hover:underline">&laquo; Torna alla lista partite</a>
         </div>
-        <x-statistics :game="$game"/>
+        {{-- <x-statistics :game="$game"/> --}} 
+        <div id="statistics-wrapper"
+            data-game-id="{{ $game->id }}"
+            data-game='@json($game)'>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
                 <h3 class="text-xl font-semibold mb-4 text-blue-400">Developer</h3>

@@ -2,7 +2,11 @@
     <div class="mb-8">
         <a href="/games" class="text-blue-200 hover:underline">&laquo; Torna alla lista partite</a>
     </div>
-    <x-statistics :game="$game"/>
+    {{-- <x-statistics :game="$game"/> --}} 
+    <div id="statistics-wrapper"
+        data-game-id="{{ $game->id }}"
+        data-game='@json($game)'>
+    </div>
     <form method="POST" action="/{{$game->id}}/candidates/create" class="my-8">
         @csrf
          <button type="submit" class="bg-blue-200 hover:bg-blue-100 text-black font-bold py-2 px-4 rounded text-sm">Genera nuovi candidati</button>

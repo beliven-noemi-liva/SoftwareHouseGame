@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Dev;
-use App\Models\Sale;    
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'complex',
@@ -19,26 +18,30 @@ class Project extends Model
         'status',
         'initial_complex',
     ];
+
     public function devs()
     {
         return $this->hasMany(Dev::class);
     }
+
     public function sale()
     {
         return $this->belongsTo(Sale::class);
     }
-    public function game() {
+
+    public function game()
+    {
         return $this->belongsTo(Game::class);
     }
 
     public function assignAvailableDevs()
     {
-        // Se il progetto non è in stato "ready", esci
+        // check if the projcet's state is ready
         if ($this->status !== 'ready') {
             return null;
         }
 
-        // Trova i dev disponibili (senza progetto assegnato)
+        // find the available devs
         $availableDevs = $this->game
             ->devs()
             ->whereNull('project_id')
@@ -46,56 +49,58 @@ class Project extends Model
 
         if ($availableDevs->isEmpty()) {
             return [
-                'devs_assigned' => 0,
-                'status_changed' => false,
+                'devs_assigned'       => 0,
+                'status_changed'      => false,
                 'new_project_created' => false,
             ];
         }
 
-        // Assegna i dev al progetto
+        // assign the devs
         foreach ($availableDevs as $dev) {
             $dev->update(['project_id' => $this->id]);
         }
 
-        // Cambia lo stato del progetto a "in_progress" e salva la complessità iniziale
+        // change the project's state and save the initial complex
         $this->update([
-            'status' => 'in_progress',
-            'initial_complex' => $this->complex
+            'status'          => 'in_progress',
+            'initial_complex' => $this->complex,
         ]);
-        // Il sale procaccia un nuovo progetto il wait rende lento il processo
-        $this->sale->procacciaProgetto($this->game);
+
+        // remove the procaccia method from here because it was also in the economy tick and here was slow
+        // $this->sale->procacciaProgetto($this->game);
         return [
-            'devs_assigned' => $availableDevs->count(),
-            'status_changed' => true,
+            'devs_assigned'       => $availableDevs->count(),
+            'status_changed'      => true,
             'new_project_created' => true,
         ];
     }
 
     public function updateProgress()
     {
-        // Se il progetto non è in stato "in_progress", esci
+        // check if the project's state is in_progress
         if ($this->status !== 'in_progress') {
             return [
                 'updated' => false,
-                'message' => 'Project not in progress'
+                'message' => 'Project not in progress',
             ];
         }
 
-        // Somma exp dei dev che lavorano
+        // sum the dev's exp
         $devs = $this->devs;
         $progressReduction = $devs->sum('exp');
 
-        // Riduci complessità
+        // decrease the complexity
         $newComplexity = max(0, $this->complex - $progressReduction);
         $this->complex = $newComplexity;
 
-        // Se la complessità raggiunge 0, aggiorna il progetto a stato done e libera i dev
+        // when the complexity is 0, change the project's state and remove the devs
         if ($newComplexity <= 0) {
             $this->status = 'done';
             foreach ($devs as $dev) {
-                $dev->update(['project_id' => null]);   
+                $dev->update(['project_id' => null]);
             }
-            //aggiunto in seguito prima lo gestivo diversamente se le logiche non tornano.
+
+            // update the patrimonio
             $game = $this->game;
             $game->patrimonio += $this->value;
             $game->save();
@@ -103,13 +108,13 @@ class Project extends Model
         }
 
         $this->save();
-        
+
         return [
-            'updated' => true,
-            'complex' => $this->complex,
-            'status' => $this->status,
+            'updated'            => true,
+            'complex'            => $this->complex,
+            'status'             => $this->status,
             'progress_reduction' => $progressReduction,
-            'devs_count' => $devs->count()
+            'devs_count'         => $devs->count(),
         ];
     }
 }

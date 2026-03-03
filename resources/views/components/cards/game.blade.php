@@ -1,3 +1,5 @@
+{{-- Deprecated: This file/component is not used anymore.
+Kept for historical/reference purposes. May be removed in the future. --}}
 <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #aaa; border-radius: 12px; margin-bottom: 20px; padding: 16px; min-width: 400px;" data-game-id="{{ $game->id }}" data-game-state="{{ $game->state }}">
 <div style="flex:1; font-size: 1.25rem; font-weight: bold;">
     <a href="/games/{{$game->id}}" class="text-white hover:text-blue-300 transition-colors duration-150">

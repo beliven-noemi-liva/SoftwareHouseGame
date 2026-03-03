@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/games/{game}/candidates', [GameController::class,  'showCandidates']);
     Route::post('/{game}/candidates/{candidate}/hire', [GameController::class, 'hireCandidate']);
 });
-// progetti e tick
+// project e tick
 Route::middleware('auth')->group(function () {
     Route::get('/games/{game}/projects', [ProjectController::class, 'index']);
     Route::get('/games/{game}/projects/{project}', [ProjectController::class, 'show']);
@@ -47,4 +47,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/games/{game}/update-all-projects', [\App\Http\Controllers\GameController::class, 'updateAllProjects']);
     Route::post('/games/{game}/tick', [\App\Http\Controllers\GameController::class, 'tick']);
     Route::post('/games/tick-all', [\App\Http\Controllers\GameController::class, 'tickAll']);
+});
+// update the statistics of the game
+Route::get('api/games/{game}/statistics', function (\App\Models\Game $game) {
+    $game->processEconomyTick();
+
+    return $game->only(['id', 'name', 'patrimonio', 'state']);
+});
+
+// catch the data of the games
+Route::get('api/games/{game}/datas', function (\App\Models\Game $game) {
+    return $game->only(['id', 'name', 'patrimonio', 'state']);
 });
